@@ -1,30 +1,36 @@
-GCC=g++
-CFLAGS= -g -std=c++14 -Wall -Wextra -pedantic
+CC = gcc
+CFLAGS = -g -std=c11 -Wall -Wextra -pedantic
 
-all: main.o reader.o expr.o func.o exception.o
-	$(GCC) $(CFLAGS) -o plot main.o reader.o expr.o func.o exception.o
+CXX = g++
+CXXFLAGS = -g -std=c++14 -Wall -Wextra -pedantic
 
-reader.o: reader.cpp reader.h
-	$(GCC) $(CFLAGS) -c reader.cpp
+%.o : %.c
+	$(CC) $(CFLAGS) -c $*.c -o $*.o
 
-expr.o: expr.cpp expr.h
-	$(GCC) $(CFLAGS) -c expr.cpp
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c $*.cpp -o $*.o
 
-func.o: func.cpp func.h
-	$(GCC) $(CFLAGS) -c func.cpp
+C_SRCS = pnglite.c
+CXX_SRCS = main.cpp plot.cpp bounds.cpp image.cpp exception.cpp \
+	reader.cpp renderer.cpp expr.cpp expr_parser.cpp func.cpp \
+	fill.cpp
 
-exception.o: exception.cpp exception.h
-	$(GCC) $(CFLAGS) -c exception.cpp
+OBJS = $(C_SRCS:.c=.o) $(CXX_SRCS:.cpp=.o)
 
-main.o: main.cpp
-	$(GCC) $(CFLAGS) -c main.cpp
+plot : $(OBJS)
+	$(CXX) -o $@ $(OBJS) -lm -lz
 
-test: test.o
-	$(GCC) $(CFLAGS) -o test test.o
+clean :
+	rm -f *.o plot
 
-test.o: test.cpp
-	$(GCC) $(CFLAGS) -c test.cpp
+depend :
+	$(CC) -M $(CFLAGS) $(C_SRCS) > depend.mak
+	$(CXX) -M $(CXXFLAGS) $(CXX_SRCS) >> depend.mak
 
-clean:
-	rm *.o plot
+depend.mak :
+	touch $@
 
+all : $(OBJS)
+	$(CXX) -o $@ $(OBJS) -lm -lz
+
+include depend.mak

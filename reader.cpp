@@ -4,111 +4,119 @@
 
 
 #include "reader.h"
+#include "expr_parser.h"
 #include "func.h"
 #include "exception.h"
 
 namespace 
 {
-/**
- * Tokenize str into vector
- */
-std::deque<std::string> tokenize(std::string str) {
-  std::stringstream ss(str);
-  std::string token;
-  std::deque<std::string> queue;
-  while (std::getline(ss, token, ' ')) {
-    queue.push_back(token);
+  std::deque<std::string> tokenize(std::string str) {
+    std::stringstream ss(str);
+    std::string token;
+    std::deque<std::string> queue;
+    while (std::getline(ss, token, ' ')) {
+      queue.push_back(token);
+    }
+    return queue;
   }
-  return queue;
-}
 
-
-Expr* parsePfxExpr(std::deque<std::string> & tokens) {
-  std::string n = tokens[0];
-  tokens.pop_front(); // pop the first token
-
-  Expr* expr = NULL;
-  if (n.compare("x") == 0) {
-    return new X_Expr();
-
-  } else if (n.compare("pi") == 0) {
-    return new PI_Expr();
-
-  } else if (n.compare("(") == 0) {
-    n = tokens[0];
-    tokens.pop_front(); // pop first token from tokens
-    
-    if (n.compare("sin") == 0) {
-      expr = new Sine_Expr();
-
-    } else if (n.compare("cos") == 0) {
-      expr = new Cosine_Expr();
-
-    } else if (n.compare("+") == 0) {
-      expr = new Plus_Expr();
-
-    } else if (n.compare("-") == 0) {
-      expr = new Minus_Expr();
-
-    } else if (n.compare("*") == 0) {
-      expr = new Multiply_Expr();
-
-    } else if (n.compare("/") == 0) {
-      expr = new Divide_Expr();
-
-    } else {
-      throw PlotException("invalid function name.");
+  void parsePlotDirective(std::deque<std::string> tokens, Plot &plot) {
+    if (tokens.size() != 7) {
+      throw PlotException("Invalid Plot directive in plot input file.");
     }
 
-  } else {
-    double value = strtod(n.c_str(), NULL); // convert string to double
-    
-    if (value == 0) {
-      throw PlotException("Unexpected token.");
-    } else {
-     return new Value_Expr(value);
+    int xmin = stoi(tokens[1]);
+    double ymin = stod(tokens[2]);
+    int xmax = stoi(tokens[3]);
+    double ymax = stod(tokens[4]);
+    int width = stoi(tokens[5]);
+    int height = stoi(tokens[6]);
+
+    if (xmin > xmax) {
+      throw PlotException("xmin is not less than xmax.");
     }
+    if (ymin > ymax) {
+      throw PlotException("ymin is not less than ymax.");
+    }
+    if (width < 0) {
+      throw PlotException("width is not positive.");
+    }
+    if (height < 0) {
+      throw PlotException("height is not positive.");
+    }
+
+    plot.set_bounds(new Bounds(xmin, ymin, xmax, ymax));
+    plot.set_width(width);
+    plot.set_height(height);
   }
 
-  std::vector<Expr*> args;
-  while (tokens[0].compare(")") != 0) { // first token of tokesn is not right parentihis
-    Expr* arg = parsePfxExpr(tokens);
-    args.push_back(arg);
+  void parseColorDirective(std::deque<std::string> tokens, Plot &plot) {
+    if (tokens.size() != 5) {
+      throw PlotException("Invalid Color directive in plot input file.");
+    }
+    std::string fn_name = tokens[1];
+    Color color;
+    color.m_fn_name = fn_name;
+    color.r = stoi(tokens[2]);
+    color.g = stoi(tokens[3]);
+    color.b = stoi(tokens[4]);
+
+    plot.add_color(color);
   }
-  expr->set_operands(args); // add operands
 
-  tokens.pop_front(); // should be right parenthesis
+  void parseFillAboveDirective(std::deque<std::string> tokens, Plot &plot) {
+    if (tokens.size() != 6) {
+      throw PlotException("Invalid FillAbove directives in plot input file.");
+    }
 
-  return expr;
+    std::string fn_name = tokens[1];
+    float opacity = stof(tokens[2]);
+    Color color;
+    color.m_fn_name = fn_name;
+    color.r = stoi(tokens[3]);
+    color.g = stoi(tokens[4]);
+    color.b = stoi(tokens[5]);
+
+    FillAbove* fill = new FillAbove(fn_name, opacity, color);
+    plot.add_fill(fill);
+  }  
+
+
+  void parseFillBelowDirective(std::deque<std::string> tokens, Plot &plot) {
+    if (tokens.size() != 6) {
+      throw PlotException("Invalid FillBelow directives in plot input file.");
+    }
+
+    std::string fn_name = tokens[1];
+    float opacity = stof(tokens[2]);
+    Color color;
+    color.m_fn_name = fn_name;
+    color.r = stoi(tokens[3]);
+    color.g = stoi(tokens[4]);
+    color.b = stoi(tokens[5]);
+
+    FillBelow* fill = new FillBelow(fn_name, opacity, color);
+    plot.add_fill(fill);
+  }  
+
+  void parseFillBetweenDirective(std::deque<std::string> tokens, Plot &plot) {
+    if (tokens.size() != 7) {
+      throw PlotException("Invalid FillBetween directives in plot input file.");
+    }
+
+    std::string fn_name = tokens[1];
+    std::string second_fn_name = tokens[2];
+    float opacity = stof(tokens[3]);
+    Color color;
+    color.m_fn_name = fn_name;
+    color.r = stoi(tokens[4]);
+    color.g = stoi(tokens[5]);
+    color.b = stoi(tokens[6]);
+
+    FillBetween* fill = new FillBetween(fn_name, second_fn_name, opacity, color);
+    plot.add_fill(fill);
+  }  
 }
-
-/**
- * Create Function instance 
- */
-Function* parse_function(std::deque<std::string> tokens) {
-
-  const int count = tokens.size();
-
-  if (count < 2) {
-    throw PlotException("Function directive misses function name.");
-  } else if (count < 3) {
-    throw PlotException("Function directive misses expression.");
-  }
-
-  const std::string fn_name = tokens[1];
-
-  tokens.pop_front(); // pop directive
-  tokens.pop_front(); // pop function name
-
-  Expr *expr = parsePfxExpr(tokens);
-
-  Function* fn = new Function(fn_name, expr);
-
-  return fn;
-}
-
-
-} // namespace 
 
 Reader::Reader() {
 }
@@ -116,35 +124,43 @@ Reader::Reader() {
 Reader::~Reader() {
 }
 
-void Reader::read_input(std::istream &in) {
+void Reader::read_input(std::istream &in, Plot &plot) {
 
-  std::string buf;
-  
   // Read line by line from istream
+  std::string buf;
   while (getline(in, buf)) {
-    std::deque<std::string> queue = tokenize(buf);
-    if (queue.size() == 0) {
-      continue;
-    }
-    std::string directive = queue[0];
+
+    std::deque<std::string> tokens = tokenize(buf);
+    std::stringstream ss = std::stringstream(buf);
+    std::string directive;
+    ss >> directive;
 
     if (directive.compare("Function") == 0) {
-      Function* fn = parse_function(queue);
-      double value = fn->get_expr()->eval(1);
-      std::cout << "value=" << value << "\n";
+      std::string fn_name;
+      ss >> fn_name;
+
+      ExprParser parser;
+      Expr* expr = parser.parse(ss);
+      Function* fn = new Function(fn_name, expr);
+      plot.add_function(fn);
 
     } else if (directive.compare("Plot") == 0) {
-      //TODO
+      parsePlotDirective(tokens, plot);
+
     } else if (directive.compare("Color") == 0) {
-      //TODO
-    } else if (directive.compare("FillAbove") == 0) {
-      //TODO
+      parseColorDirective(tokens, plot);
+
+     } else if (directive.compare("FillAbove") == 0) {
+      parseFillAboveDirective(tokens, plot);
+
     } else if (directive.compare("FillBelow") == 0) {
-      //TODO
+      parseFillBelowDirective(tokens, plot);
+
     } else if (directive.compare("FillBetween") == 0) {
-      //TODO
+      parseFillBetweenDirective(tokens, plot);
+
     } else {
-      //TODO: throw exception
+      throw PlotException("Unknown directive.");
     }
   }
 

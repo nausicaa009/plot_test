@@ -1,0 +1,42 @@
+GCC=g++
+CFLAGS= -g -std=c++14 -Wall -Wextra -pedantic
+
+all: main.o reader.o expr.o func.o exception.o bounds.o image.o fill.o pnglite.o
+	$(GCC) $(CFLAGS) -o plot main.o reader.o expr.o func.o exception.o bounds.o image.o fill.o pnglite.o
+
+reader.o: reader.cpp reader.h
+	$(GCC) $(CFLAGS) -c reader.cpp
+
+expr.o: expr.cpp expr.h
+	$(GCC) $(CFLAGS) -c expr.cpp
+
+func.o: func.cpp func.h
+	$(GCC) $(CFLAGS) -c func.cpp
+
+exception.o: exception.cpp exception.h
+	$(GCC) $(CFLAGS) -c exception.cpp
+
+bounds.o: bounds.cpp bounds.h
+	$(GCC) $(CFLAGS) -c bounds.cpp
+
+image.o: image.cpp image.h
+	$(GCC) $(CFLAGS) -c image.cpp
+
+fill.o: fill.cpp fill.h
+	$(GCC) $(CFLAGS) -c fill.cpp
+
+pnglite.o: pnglite.c pnglite.h
+	gcc -g -c pnglite.c
+
+main.o: main.cpp
+	$(GCC) $(CFLAGS) -c main.cpp
+
+test: test.o
+	$(GCC) $(CFLAGS) -o test test.o
+
+test.o: test.cpp
+	$(GCC) $(CFLAGS) -c test.cpp
+
+clean:
+	rm *.o plot
+

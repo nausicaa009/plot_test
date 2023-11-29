@@ -4,6 +4,7 @@
 #include <istream>
 #include <string>
 #include <deque>
+#include "plot.h"
 
 class Reader {
 private:
@@ -16,7 +17,7 @@ public:
   Reader();
   ~Reader();
 
-  void read_input(std::istream &in);
+  void read_input(std::istream &in, Plot &plot);
 };
 
 #endif
