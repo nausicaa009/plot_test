@@ -63,7 +63,24 @@ void Renderer::draw_function(Function* function) {
     double y = function->get_expr()->eval(x);
     int i = h - 1 - floor(((double)(y - ymin)/(double)(ymax - ymin) * h));
 
+    // center dot
     pixels[i * w + j] = color;
+    // above dot
+    if (i > 0) {
+      pixels[(i - 1) * w + j] = color;  
+    }
+    // below dot
+    if (i < h) {
+      pixels[(i + 1) * w + j] = color;  
+    }
+    // left dot
+    if (j > 0) {
+      pixels[i * w + j - 1] = color;
+    }
+    // right dot
+    if (j < w) {
+      pixels[i * w + j + 1] = color;
+    }
   }
 }
 
