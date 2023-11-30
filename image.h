@@ -14,6 +14,8 @@ private:
   Image(const Image &);
   Image &operator=(const Image &);
 
+  unsigned char* get_pixels();
+
 public:
   Image(int width, int height);
   ~Image();
@@ -22,6 +24,7 @@ public:
   int get_height() const { return m_height; }
 
   // TODO: add member function to access pixel Color data
+  Color* get_color_pixels() { return m_pixels; }
 
   void write_png(std::ostream &out);
 };

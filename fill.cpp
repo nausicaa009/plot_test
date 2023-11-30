@@ -7,18 +7,19 @@ Fill::~Fill() {
 }
 
 // TODO: implement member functions
-std::string Fill::get_fn_name() { 
-    return m_fn_name; 
+bool FillAbove::is_fill(double x, double y) {
+    double y_val = m_fn->get_expr()->eval(x);
+    return y > y_val;
 }
 
-float Fill::get_opacity() { 
-    return m_opacity; 
+bool FillBelow::is_fill(double x, double y) {
+    double y_val = m_fn->get_expr()->eval(x);
+    return y < y_val;
 }
 
-Color Fill::get_color() { 
-    return m_color; 
+bool FillBetween::is_fill(double x, double y) {
+    double y_val1 = m_fn1->get_expr()->eval(x);
+    double y_val2 = m_fn2->get_expr()->eval(x);
+    return y >= y_val1 && y <= y_val2;
 }
 
-std::string FillBetween::get_second_fn_name() {
-    return m_second_fn_name;
-}

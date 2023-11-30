@@ -15,6 +15,9 @@ private:
   Renderer(const Renderer &);
   Renderer &operator=(const Renderer &);
 
+  void draw_function(Function* function);
+  void fill_color(Fill* fill);
+
 public:
   Renderer(const Plot &plot);
   ~Renderer();

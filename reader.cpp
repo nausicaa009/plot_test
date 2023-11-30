@@ -56,12 +56,11 @@ namespace
     }
     std::string fn_name = tokens[1];
     Color color;
-    color.m_fn_name = fn_name;
     color.r = stoi(tokens[2]);
     color.g = stoi(tokens[3]);
     color.b = stoi(tokens[4]);
 
-    plot.add_color(color);
+    plot.add_color(fn_name, color);
   }
 
   void parseFillAboveDirective(std::deque<std::string> tokens, Plot &plot) {
@@ -72,12 +71,12 @@ namespace
     std::string fn_name = tokens[1];
     float opacity = stof(tokens[2]);
     Color color;
-    color.m_fn_name = fn_name;
     color.r = stoi(tokens[3]);
     color.g = stoi(tokens[4]);
     color.b = stoi(tokens[5]);
 
-    FillAbove* fill = new FillAbove(fn_name, opacity, color);
+    Function* fn = plot.get_function(fn_name);
+    FillAbove* fill = new FillAbove(fn, opacity, color);
     plot.add_fill(fill);
   }  
 
@@ -90,12 +89,12 @@ namespace
     std::string fn_name = tokens[1];
     float opacity = stof(tokens[2]);
     Color color;
-    color.m_fn_name = fn_name;
     color.r = stoi(tokens[3]);
     color.g = stoi(tokens[4]);
     color.b = stoi(tokens[5]);
 
-    FillBelow* fill = new FillBelow(fn_name, opacity, color);
+    Function* fn = plot.get_function(fn_name);
+    FillBelow* fill = new FillBelow(fn, opacity, color);
     plot.add_fill(fill);
   }  
 
@@ -108,12 +107,13 @@ namespace
     std::string second_fn_name = tokens[2];
     float opacity = stof(tokens[3]);
     Color color;
-    color.m_fn_name = fn_name;
     color.r = stoi(tokens[4]);
     color.g = stoi(tokens[5]);
     color.b = stoi(tokens[6]);
 
-    FillBetween* fill = new FillBetween(fn_name, second_fn_name, opacity, color);
+    Function* fn1 = plot.get_function(fn_name);
+    Function* fn2 = plot.get_function(second_fn_name);
+    FillBetween* fill = new FillBetween(fn1, fn2, opacity, color);
     plot.add_fill(fill);
   }  
 }

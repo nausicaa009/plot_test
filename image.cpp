@@ -21,11 +21,6 @@ unsigned ostream_png_write_callback(void* input, size_t size, size_t numel, void
   return numel;
 }
 
-unsigned char* get_pixels() {
-  //TODO
-  return NULL;
-}
-
 } // end anonymous namespace
 
 Image::Image(int width, int height)
@@ -33,6 +28,10 @@ Image::Image(int width, int height)
   , m_height(height)
   , m_pixels(new Color[width * height]) {
   // TODO: initialize pixel data
+  Color black = {0, 0, 0}; //Fill with black color
+  for (int i=0; i<width*height; i++) {
+    m_pixels[i] = black;
+  }
 }
 
 Image::~Image() {
@@ -63,3 +62,9 @@ void Image::write_png(std::ostream &out)
     throw PlotException("Error converting writing image data as PNG");
   }
 }
+
+
+unsigned char* Image::get_pixels() {
+  return (unsigned char*)m_pixels;
+}
+

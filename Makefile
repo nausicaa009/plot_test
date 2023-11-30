@@ -17,6 +17,10 @@ CXX_SRCS = main.cpp plot.cpp bounds.cpp image.cpp exception.cpp \
 
 OBJS = $(C_SRCS:.c=.o) $(CXX_SRCS:.cpp=.o)
 
+#TODO: remove all target
+all : $(OBJS)
+	$(CXX) -o $@ $(OBJS) -lm -lz
+
 plot : $(OBJS)
 	$(CXX) -o $@ $(OBJS) -lm -lz
 
@@ -30,7 +34,5 @@ depend :
 depend.mak :
 	touch $@
 
-all : $(OBJS)
-	$(CXX) -o $@ $(OBJS) -lm -lz
 
 include depend.mak

@@ -1,1 +1,4 @@
-Function fn1 ( / 10 20 )
+Plot 0 -2.5 40 2.5 640 480
+Function fn1 ( sin x )
+Color fn1 100 100 255
+FillAbove fn1 0.5 0 0 200

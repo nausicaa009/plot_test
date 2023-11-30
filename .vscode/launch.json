@@ -10,8 +10,8 @@
             "request": "launch",
             "program": "${workspaceFolder}/plot",
             "args": [
-                "input/example09.txt",
-                "input/example09.out"
+                "input/example06.txt",
+                "input/example06.png"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

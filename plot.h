@@ -16,7 +16,7 @@ private:
   int m_height;
   Bounds* m_bounds;
 
-  std::vector<Color> m_color_vector;
+  std::map<std::string, Color> m_color_map;
   std::vector<Function*> m_function_vector;
   std::vector<Fill*> m_fill_vector;
 
@@ -37,14 +37,16 @@ public:
   Bounds& get_bounds() const { return *m_bounds; }
   void set_bounds(Bounds* bounds) { m_bounds = bounds; }
 
-  void add_color(Color color);
-  Color get_color(std::string fn_name);
+  void add_color(std::string fn_name, Color color);
+  Color get_color(std::string fn_name) const;
 
   void add_function(Function* function);
-  Function* get_function(std::string fn_name);
+  Function* get_function(std::string fn_name) const;
 
   void add_fill(Fill* fill);
-  Fill* get_fill(std::string fn_name);
+
+  std::vector<Function*> get_all_functions() const;
+  std::vector<Fill*> get_all_fills() const;
 };
 
 #endif // PLOT_H

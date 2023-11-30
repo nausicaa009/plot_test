@@ -49,11 +49,7 @@ Expr* parsePfxExpr(std::deque<std::string> & tokens) {
   } else {
     double value = strtod(n.c_str(), NULL); // convert string to double
     
-    if (value == 0) {
-      throw PlotException("Unexpected token.");
-    } else {
-     return new Value_Expr(value);
-    }
+    return new Value_Expr(value);
   }
 
   std::vector<Expr*> args;

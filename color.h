@@ -9,7 +9,6 @@ struct Color {
 
   // member functions for doing operations on Color values
   // could be helpful
-  std::string m_fn_name;
 };
 
 #endif // COLOR_H

@@ -3,54 +3,74 @@
 
 #include <string>
 #include "image.h"
+#include "func.h"
 
 class Fill {
 private:
   // TODO: add fields to represent the fill
-  std::string m_fn_name;
   float m_opacity;
   Color m_color;
 
 public:
   // TODO: add appropriate constructors
-  Fill(std::string fn_name, float opacity, Color color) :
-    m_fn_name(fn_name), m_opacity(opacity), m_color(color) {
+  Fill(float opacity, Color color) :
+    m_opacity(opacity), m_color(color) {
   }
 
-  ~Fill();
+  virtual ~Fill();
 
   // TODO: add appropriate member functions
-  std::string get_fn_name();
+  float get_opacity() { return m_opacity;  };
 
-  float get_opacity();
+  Color get_color() { return m_color; }
 
-  Color get_color();
+  virtual bool is_fill(double x, double y) = 0;
 };
 
 class FillAbove : public Fill {
+private:
+  Function* m_fn;
+
 public:
-  FillAbove(std::string fn_name, float opacity, Color color) : 
-    Fill(fn_name, opacity, color) {
+  FillAbove(Function* fn, float opacity, Color color) : 
+    Fill(opacity, color), m_fn(fn) {
   }
+
+  ~FillAbove() override {
+  }
+
+  bool is_fill(double x, double y) override;
 };
 
 class FillBelow : public Fill {
+private:
+  Function* m_fn;
+
 public:
-  FillBelow(std::string fn_name, float opacity, Color color) : 
-    Fill(fn_name, opacity, color) {
+  FillBelow(Function* fn, float opacity, Color color) : 
+    Fill(opacity, color), m_fn(fn) {
   }
+
+  ~FillBelow() override {
+  }
+
+  bool is_fill(double x, double y) override;
 };
 
 class FillBetween : public Fill {
 private:
-  std::string m_second_fn_name;
+  Function* m_fn1;
+  Function* m_fn2;
 
 public:
-  FillBetween(std::string fn_name, std::string second_fn_name, float opacity, Color color) : 
-    Fill(fn_name, opacity, color), m_second_fn_name(second_fn_name) {
+  FillBetween(Function* fn1, Function* fn2,float opacity, Color color) : 
+    Fill(opacity, color), m_fn1(fn1), m_fn2(fn2) {
   }
-  
-  std::string get_second_fn_name();
+
+  ~FillBetween() override {
+  }
+
+  bool is_fill(double x, double y) override;
 };
 
 #endif // FILL_H
