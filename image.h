@@ -23,7 +23,7 @@ public:
   int get_width() const { return m_width; }
   int get_height() const { return m_height; }
 
-  // TODO: add member function to access pixel Color data
+  // TODO: add member function to access pixel Color data - DONE
   Color* get_color_pixels() { return m_pixels; }
 
   void write_png(std::ostream &out);

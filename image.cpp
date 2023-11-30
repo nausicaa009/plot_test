@@ -27,7 +27,7 @@ Image::Image(int width, int height)
   : m_width(width)
   , m_height(height)
   , m_pixels(new Color[width * height]) {
-  // TODO: initialize pixel data
+  // TODO: initialize pixel data - DONE
   Color black = {0, 0, 0}; //Fill with black color
   for (int i=0; i<width*height; i++) {
     m_pixels[i] = black;
@@ -35,10 +35,15 @@ Image::Image(int width, int height)
 }
 
 Image::~Image() {
-  // TODO: deallocate memory
+  // TODO: deallocate memory - DONE
+  delete m_pixels;
 }
 
-// TODO: implement member functions
+// TODO: implement member functions - DONE
+
+unsigned char* Image::get_pixels() {
+  return (unsigned char*)m_pixels;
+}
 
 void Image::write_png(std::ostream &out)
 {
@@ -64,7 +69,4 @@ void Image::write_png(std::ostream &out)
 }
 
 
-unsigned char* Image::get_pixels() {
-  return (unsigned char*)m_pixels;
-}
 

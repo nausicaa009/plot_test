@@ -11,7 +11,7 @@
 
 class Plot {
 private:
-  // TODO: add fields to represent plot bounds, functions, fills, etc.
+  // TODO: add fields to represent plot bounds, functions, fills, etc.  - DONE
   int m_width;
   int m_height;
   Bounds* m_bounds;
@@ -28,7 +28,7 @@ public:
   Plot();
   ~Plot();
 
-  // TODO: add member functions to set and modify plot data
+  // TODO: add member functions to set and modify plot data - DONE
   int get_width() const { return m_width; }
   int get_height() const { return m_height; }
   void set_width(int width) { m_width = width; }

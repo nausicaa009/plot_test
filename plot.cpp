@@ -2,13 +2,14 @@
 #include "plot.h"
 
 Plot::Plot()
-  // TODO: initialize fields
+  // TODO: initialize fields - DONE
+  : m_width(0), m_height(0), m_bounds(NULL)
 {
 }
 
 Plot::~Plot()
 {
-  // TODO: delete dynamically-allocated objects
+  // TODO: delete dynamically-allocated objects - DONE
   delete m_bounds;
 
   // Free m_function_map
@@ -16,12 +17,16 @@ Plot::~Plot()
         it != m_function_vector.cend(); it++) {
     delete *it;
   }
+  m_function_vector.clear();
 
   // Free m_fill_map
   for (std::vector<Fill*>::const_iterator it = m_fill_vector.cbegin();
         it != m_fill_vector.cend(); it++) {
     delete *it;
   }
+  m_fill_vector.clear();
+
+  m_color_map.clear();
 }
 
 void Plot::add_color(std::string fn_name, Color color) {
@@ -54,16 +59,6 @@ Function* Plot::get_function(std::string fn_name) const {
 void Plot::add_fill(Fill* fill) {
   m_fill_vector.push_back(fill);
 }
-
-// Fill* Plot::get_fill(std::string fn_name) const {
-//   for (std::vector<Fill*>::const_iterator it = m_fill_vector.cbegin();
-//       it != m_fill_vector.cend(); it++) {
-//     if (fn_name.compare((*it)->get_fn_name()) == 0) {
-//       return *it;
-//     }
-//   }
-//   return NULL;
-// }
 
 std::vector<Function*> Plot::get_all_functions() const {
   return m_function_vector;

@@ -3,14 +3,14 @@
 
 class Bounds {
 private:
-  // TODO: add fields
+  // TODO: add fields - DONE
   int m_xmin;
   double m_ymin;
   int m_xmax;
   double m_ymax;
 
 public:
-  // TODO: add member functions
+  // TODO: add member functions - DONE
   Bounds(int xmin, double ymin, int xmax, double ymax) : 
     m_xmin(xmin), m_ymin(ymin), m_xmax(xmax), m_ymax(ymax) {
   }

@@ -1,0 +1,10 @@
+./plot input/example01.txt input/example01.png
+./plot input/example02.txt input/example02.png
+./plot input/example03.txt input/example03.png
+./plot input/example04.txt input/example04.png
+./plot input/example05.txt input/example05.png
+./plot input/example06.txt input/example06.png
+./plot input/example07.txt input/example07.png
+./plot input/example08.txt input/example08.png
+./plot input/example09.txt input/example09.png
+

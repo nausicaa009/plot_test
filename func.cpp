@@ -6,5 +6,5 @@ Function::Function(const std::string &name, Expr *expr)
 }
 
 Function::~Function() {
-  // TODO delete
+  delete m_expr;
 }

@@ -7,19 +7,19 @@
 
 class Fill {
 private:
-  // TODO: add fields to represent the fill
+  // TODO: add fields to represent the fill - DONE
   float m_opacity;
   Color m_color;
 
 public:
-  // TODO: add appropriate constructors
+  // TODO: add appropriate constructors - DONE
   Fill(float opacity, Color color) :
     m_opacity(opacity), m_color(color) {
   }
 
   virtual ~Fill();
 
-  // TODO: add appropriate member functions
+  // TODO: add appropriate member functions - DONE
   float get_opacity() { return m_opacity;  };
 
   Color get_color() { return m_color; }

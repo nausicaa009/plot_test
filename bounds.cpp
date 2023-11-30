@@ -1,6 +1,6 @@
 #include "bounds.h"
 
-// TODO: implement member functions
+// TODO: implement member functions - DONE
 
 int Bounds::getXmin() {
     return m_xmin;

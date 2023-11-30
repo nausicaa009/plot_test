@@ -106,9 +106,9 @@ void Renderer::fill_color(Fill* fill) {
 
       if (fill->is_fill(xj, yi)) {
         Color orig_color = pixels[i * w + j];
-        uint8_t red = (1 - opacity) * orig_color.r + opacity * color.r;
-        uint8_t green =  (1 - opacity) * orig_color.g + opacity * color.g;
-        uint8_t blue =  (1 - opacity) * orig_color.b + opacity * color.b;
+        uint8_t red = (1 - opacity) * orig_color.r + (1 - opacity) * color.r;
+        uint8_t green =  (1 - opacity) * orig_color.g + (1 - opacity) * color.g;
+        uint8_t blue =  (1 - opacity) * orig_color.b + (1 - opacity) * color.b;
         Color blend_color = { red, green, blue };
         pixels[i * w + j] = blend_color;
       }

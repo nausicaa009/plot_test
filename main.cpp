@@ -25,21 +25,24 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  // TODO: make sure exceptions are handled properly
+  // TODO: make sure exceptions are handled properly - DONE
+  try {
+    Plot plot;
 
-  Plot plot;
+    // read the plot description
+    Reader reader;
+    reader.read_input(in, plot);
 
-  // read the plot description
-  Reader reader;
-  reader.read_input(in, plot);
+    // render the plot to an Image
+    Renderer renderer(plot);
+    std::unique_ptr<Image> img(renderer.render());
 
-  // render the plot to an Image
-  Renderer renderer(plot);
-  std::unique_ptr<Image> img(renderer.render());
-
-  // write the Image as a PNG file
-  img->write_png(out);
-  std::cout << "Wrote plot image successfully!\n";
+    // write the Image as a PNG file
+    img->write_png(out);
+    std::cout << "Wrote plot image successfully!\n";
+  } catch (...) {
+    std::cerr << "Unexpected error.";
+  }
 
   return 0;
 }
